@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Dices, Sparkles } from "lucide-react";
+import { createApiUrl } from "@/lib/api";
 
 interface GeneratedConcept {
   content: string;
@@ -46,7 +47,7 @@ export default function NewDreamView() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:8000/v1/dream/new");
+      const response = await fetch(createApiUrl("v1/dream/new"));
       if (!response.ok) {
         throw new Error(`Failed to generate concepts: ${response.statusText}`);
       }
@@ -78,7 +79,7 @@ export default function NewDreamView() {
         concept_2: concept2.trim(),
       };
 
-      const response = await fetch("http://localhost:8000/v1/dream/start", {
+      const response = await fetch(createApiUrl("v1/dream/start"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

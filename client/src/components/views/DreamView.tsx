@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Link, Check } from "lucide-react";
 import ConceptCard from "@/components/ConceptCard";
 import type { ConceptResponse } from "@/types/concept";
+import { createApiUrl } from "@/lib/api";
 
 interface Dream {
   id: string;
@@ -47,7 +48,7 @@ export default function DreamView() {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8000/v1/dream/${dreamId}`);
+      const response = await fetch(createApiUrl(`v1/dream/${dreamId}`));
       if (!response.ok) {
         if (response.status === 404) {
           throw new Error("Dream not found");
@@ -76,7 +77,7 @@ export default function DreamView() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/v1/dream/${dreamId}/continue`,
+        createApiUrl(`v1/dream/${dreamId}/continue`),
         {
           method: "POST",
           headers: {

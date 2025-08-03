@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
+import { createApiUrl } from "@/lib/api";
 
 interface DreamSummary {
   id: string;
@@ -43,7 +44,7 @@ export default function FindDreamsDropdown() {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/v1/dream/list?offset=${offset}&limit=${ITEMS_PER_PAGE}`
+          createApiUrl(`v1/dream/list?offset=${offset}&limit=${ITEMS_PER_PAGE}`)
         );
 
         if (!response.ok) {
