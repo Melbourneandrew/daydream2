@@ -6,10 +6,10 @@ from sqlalchemy import pool
 
 from alembic import context
 
-# Import your Base from the database module
-from app.database import Base
+# Import SQLModel for metadata
+from sqlmodel import SQLModel
 
-# Import all models so they're registered with SQLAlchemy
+# Import all models so they're registered with SQLModel
 import app.models  # This ensures all models are imported and registered
 
 # this is the Alembic Config object, which provides
@@ -23,12 +23,10 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-target_metadata = Base.metadata
+target_metadata = SQLModel.metadata
 
 # Set the database URL from environment variable or use default
-DATABASE_URL = os.getenv(
-    "DATABASE_URL", "postgresql://postgres:postgres@localhost:5435/postgres"
-)
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./daydream.db")
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -69,7 +67,13 @@ def run_migrations_online() -> None:
     # Create engine directly with DATABASE_URL
     from sqlalchemy import create_engine
 
-    connectable = create_engine(DATABASE_URL, poolclass=pool.NullPool)
+    connectable = create_engine(
+        DATABASE_URL,
+        poolclass=pool.NullPool,
+        connect_args=(
+            {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
+        ),
+    )
 
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
